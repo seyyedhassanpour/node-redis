@@ -26,6 +26,36 @@ await cluster.set('key', 'value');
 const value = await cluster.get('key');
 ```
 
+## Aws Elasticache Clusters with TLS
+
+```typescript
+ const redisCluster = createCluster({
+    rootNodes: [
+      {
+        socket: {
+          host, // redis cluster address e.g. "clustercfg.redis-cluster-name.xiko.euw1.cache.amazonaws.com"
+          port, // redis cluster port which usually the default is 6379
+        },
+      },
+    ],
+    defaults: {
+      socket: {
+        tls: true,
+      },
+      password, // the token or password for your redis configuration
+    },
+  })
+  redisCluster
+    .on('connect', () => console.log('Connected to Redis DB'))
+    .on('ready', () => console.log('Client ready to use Redis DB'))
+    .on('end', () => console.log('Client disconnected from Redis DB'))
+    .on('error', (err) => console.log('Redis Client Error', err))
+
+  await redisCluster.connect()
+
+```
+
+
 ## `createCluster` configuration
 
 > See the [client configuration](./client-configuration.md) page for the `rootNodes` and `defaults` configuration schemas.
